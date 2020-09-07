@@ -7,12 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D186373825028B5E00A2CB43 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D186373725028B5E00A2CB43 /* NSView.swift */; };
+		D186373B25028C3400A2CB43 /* WaveRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D186373A25028C3400A2CB43 /* WaveRenderer.swift */; };
+		D18EECC625064D7F00580747 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECC525064D7F00580747 /* Note.swift */; };
+		D18EECC925064D9900580747 /* KeyLength.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECC825064D9900580747 /* KeyLength.swift */; };
+		D18EECCB25064DB800580747 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCA25064DB800580747 /* Key.swift */; };
+		D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCC25064DCA00580747 /* SheetNote.swift */; };
+		D18EECCF25064DD600580747 /* KeysManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCE25064DD600580747 /* KeysManager.swift */; };
+		D192067D2502A6B6005E7EAD /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = D192067C2502A6B6005E7EAD /* Note.swift */; };
 		D1D432E924FEE40E00ECD5F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */; };
 		D1D432EB24FEE40E00ECD5F8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */; };
 		D1D432ED24FEE41300ECD5F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */; };
 		D1D432F024FEE41300ECD5F8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1D432EE24FEE41300ECD5F8 /* Main.storyboard */; };
 		D1D432FC24FEE41400ECD5F8 /* DSP_GUI_STTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432FB24FEE41400ECD5F8 /* DSP_GUI_STTests.swift */; };
 		D1D4330724FEE41400ECD5F8 /* DSP_GUI_STUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D4330624FEE41400ECD5F8 /* DSP_GUI_STUITests.swift */; };
+		D1D551392500F30D00F3F8B4 /* Mixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D551382500F30D00F3F8B4 /* Mixer.swift */; };
+		D1D5513B2500FCB800F3F8B4 /* WavesDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +43,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D186373725028B5E00A2CB43 /* NSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
+		D186373A25028C3400A2CB43 /* WaveRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveRenderer.swift; sourceTree = "<group>"; };
+		D18EECC525064D7F00580747 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		D18EECC825064D9900580747 /* KeyLength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLength.swift; sourceTree = "<group>"; };
+		D18EECCA25064DB800580747 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		D18EECCC25064DCA00580747 /* SheetNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetNote.swift; sourceTree = "<group>"; };
+		D18EECCE25064DD600580747 /* KeysManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysManager.swift; sourceTree = "<group>"; };
+		D192067C2502A6B6005E7EAD /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		D1D432E524FEE40E00ECD5F8 /* DSP GUI ST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DSP GUI ST.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -46,6 +64,8 @@
 		D1D4330224FEE41400ECD5F8 /* DSP GUI STUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DSP GUI STUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D4330624FEE41400ECD5F8 /* DSP_GUI_STUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSP_GUI_STUITests.swift; sourceTree = "<group>"; };
 		D1D4330824FEE41400ECD5F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1D551382500F30D00F3F8B4 /* Mixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mixer.swift; sourceTree = "<group>"; };
+		D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavesDrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +93,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D186373525028B2B00A2CB43 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D186373625028B5300A2CB43 /* NSView */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D186373625028B5300A2CB43 /* NSView */ = {
+			isa = PBXGroup;
+			children = (
+				D186373725028B5E00A2CB43 /* NSView.swift */,
+			);
+			path = NSView;
+			sourceTree = "<group>";
+		};
+		D186373925028C0900A2CB43 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				D186373A25028C3400A2CB43 /* WaveRenderer.swift */,
+			);
+			path = Renderer;
+			sourceTree = "<group>";
+		};
+		D18EECC225064D3200580747 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				D18EECC425064D5500580747 /* Model */,
+				D18EECC325064D3900580747 /* Predefined */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		D18EECC325064D3900580747 /* Predefined */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Predefined;
+			sourceTree = "<group>";
+		};
+		D18EECC425064D5500580747 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D18EECC525064D7F00580747 /* Note.swift */,
+				D18EECC825064D9900580747 /* KeyLength.swift */,
+				D18EECCA25064DB800580747 /* Key.swift */,
+				D18EECCC25064DCA00580747 /* SheetNote.swift */,
+				D18EECCE25064DD600580747 /* KeysManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D1D432DC24FEE40E00ECD5F8 = {
 			isa = PBXGroup;
 			children = (
@@ -96,12 +168,18 @@
 		D1D432E724FEE40E00ECD5F8 /* DSP GUI ST */ = {
 			isa = PBXGroup;
 			children = (
+				D18EECC225064D3200580747 /* Music */,
+				D186373525028B2B00A2CB43 /* Extensions */,
+				D186373925028C0900A2CB43 /* Renderer */,
 				D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */,
 				D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */,
+				D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */,
+				D1D551382500F30D00F3F8B4 /* Mixer.swift */,
 				D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */,
 				D1D432EE24FEE41300ECD5F8 /* Main.storyboard */,
 				D1D432F124FEE41300ECD5F8 /* Info.plist */,
 				D1D432F224FEE41300ECD5F8 /* DSP_GUI_ST.entitlements */,
+				D192067C2502A6B6005E7EAD /* Note.swift */,
 			);
 			path = "DSP GUI ST";
 			sourceTree = "<group>";
@@ -254,7 +332,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18EECC925064D9900580747 /* KeyLength.swift in Sources */,
+				D18EECCB25064DB800580747 /* Key.swift in Sources */,
+				D1D551392500F30D00F3F8B4 /* Mixer.swift in Sources */,
+				D18EECCF25064DD600580747 /* KeysManager.swift in Sources */,
 				D1D432EB24FEE40E00ECD5F8 /* ViewController.swift in Sources */,
+				D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */,
+				D1D5513B2500FCB800F3F8B4 /* WavesDrawView.swift in Sources */,
+				D18EECC625064D7F00580747 /* Note.swift in Sources */,
+				D186373B25028C3400A2CB43 /* WaveRenderer.swift in Sources */,
+				D192067D2502A6B6005E7EAD /* Note.swift in Sources */,
+				D186373825028B5E00A2CB43 /* NSView.swift in Sources */,
 				D1D432E924FEE40E00ECD5F8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,6 +508,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "DSP GUI ST/DSP_GUI_ST.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = BL474C2QCB;
@@ -440,6 +529,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "DSP GUI ST/DSP_GUI_ST.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = BL474C2QCB;
