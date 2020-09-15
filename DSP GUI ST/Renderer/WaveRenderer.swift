@@ -27,7 +27,7 @@ class WaveRenderer {
     let secondSamples: CGFloat = 44100
     
     func draw(to context: CGContext) {
-        context.setLineWidth(widthBound / 400 * 4)//*width*/)
+        context.setLineWidth(widthBound / width * 4)//*width*/)
         var transformation = CGAffineTransform.init(translationX: 0, y: originY)
         transformation = transformation.scaledBy(x: 1.0, y: height/upperBound)
         context.saveGState()
@@ -38,13 +38,13 @@ class WaveRenderer {
             context.setStrokeColor(wave.color)
             let path = CGMutablePath()
             //path.move(to: wave.coords.first/*?.applying(transformation)*/ ?? CGPoint.zero)
-            var coordIndex = max(1, wave.coords.count-Int(widthBound) - (wave.coords.count-Int(widthBound)) % 60)
+            var coordIndex = min(max(1, wave.coords.count-Int(widthBound) - (wave.coords.count-Int(widthBound)) % 100), wave.coords.count-1)
             context.translateBy(x: -CGFloat(coordIndex), y: 0)
             path.move(to: wave.coords[coordIndex])
             //var pointsRendered = 0
             while coordIndex < wave.coords.count - 1 {
                 path.addLine(to: wave.coords[coordIndex])//.applying(transformation))
-                coordIndex += 60 //coordIndex + 100, wave.coords.count - 1)
+                coordIndex += 100 //coordIndex + 100, wave.coords.count - 1)
                 //pointsRendered += 1
             }
             

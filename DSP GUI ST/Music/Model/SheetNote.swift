@@ -11,4 +11,6 @@ import Foundation
 struct SheetNote {
     var notes: [Key]
     var length: KeyLength
+    var sustain: Bool = false
+    var velocity: Double = 1
 }
