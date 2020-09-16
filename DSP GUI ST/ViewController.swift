@@ -12,37 +12,20 @@ import CoreAudio
 import AudioUnit
 import AVFoundation
 
-enum GenerationType: String {
-    case sinusoid = "Sinusoid"
-    case square = "Square"
-    case triangle = "Triangle"
-    case sawtooth = "Sawtooth"
-    case noise = "Noise"
-}
-
-class Label: NSTextField {
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        //self.stringValue = "My awesome label"
-        //self.backgroundColor = .white
-        self.backgroundColor = .clear
-        self.isBezeled = false
-        self.isEditable = false
+class MainViewController: NSViewController {
+    class Model {
+        
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    class Controller {
+        enum ParamsVariation: String {
+            case signal = "Signal"
+            case frequency = "Frequency"
+            case amplitude = "Amplitude"
+        }
     }
-}
-
-class ViewController: NSViewController {
     //Controller:
-    enum ParamsVariation {
-        case signal
-        case frequency
-        case amplitude
-    }
-    var currentVars: ParamsVariation = .signal
+    var currentVars: Controller.ParamsVariation = .signal
     ///////]
     @objc func onParamsChange(_ sender: NSSegmentedControl) {
         switch sender.selectedSegment {
@@ -59,7 +42,7 @@ class ViewController: NSViewController {
         
     }
     //MARK: -subviews
-    var paramsVarChangeSwitch = NSSegmentedControl(labels: ["Signal", "Frequency", "Amplitude"], trackingMode: .selectOne, target: nil, action: #selector(onParamsChange(_:)))
+    var paramsVarChangeSwitch = NSSegmentedControl(labels: [Controller.ParamsVariation.signal.rawValue, Controller.ParamsVariation.frequency.rawValue, Controller.ParamsVariation.amplitude.rawValue], trackingMode: .selectOne, target: nil, action: #selector(onParamsChange(_:)))
     
     var audioUnit = Mixer()//ToneOutputUnit()
     var drawView = WavesDrawView()
@@ -1094,7 +1077,7 @@ protocol Renderable {
 }
 
 
-extension ViewController: NSTextFieldDelegate {
+extension MainViewController: NSTextFieldDelegate {
     func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
         if (commandSelector == #selector(NSResponder.insertNewline(_:))) {
             // Do something against ENTER key

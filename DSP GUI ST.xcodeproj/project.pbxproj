@@ -16,9 +16,13 @@
 		D18EECCB25064DB800580747 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCA25064DB800580747 /* Key.swift */; };
 		D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCC25064DCA00580747 /* SheetNote.swift */; };
 		D18EECCF25064DD600580747 /* KeysManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCE25064DD600580747 /* KeysManager.swift */; };
+		D1966BE325123EC80039F7B8 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1966BE225123EC80039F7B8 /* Label.swift */; };
+		D1966BE525123F1D0039F7B8 /* GeneratorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1966BE425123F1D0039F7B8 /* GeneratorType.swift */; };
+		D1966BE9251240370039F7B8 /* MainViewController+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1966BE8251240370039F7B8 /* MainViewController+Model.swift */; };
+		D1966BEB251240460039F7B8 /* MainViewController+Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1966BEA251240460039F7B8 /* MainViewController+Controller.swift */; };
 		D19FB73125117F7F007191A7 /* WaveParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19FB73025117F7F007191A7 /* WaveParams.swift */; };
 		D1D432E924FEE40E00ECD5F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */; };
-		D1D432EB24FEE40E00ECD5F8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */; };
+		D1D432EB24FEE40E00ECD5F8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432EA24FEE40E00ECD5F8 /* MainViewController.swift */; };
 		D1D432ED24FEE41300ECD5F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */; };
 		D1D432F024FEE41300ECD5F8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1D432EE24FEE41300ECD5F8 /* Main.storyboard */; };
 		D1D432FC24FEE41400ECD5F8 /* DSP_GUI_STTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432FB24FEE41400ECD5F8 /* DSP_GUI_STTests.swift */; };
@@ -59,10 +63,14 @@
 		D18EECCA25064DB800580747 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		D18EECCC25064DCA00580747 /* SheetNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetNote.swift; sourceTree = "<group>"; };
 		D18EECCE25064DD600580747 /* KeysManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysManager.swift; sourceTree = "<group>"; };
+		D1966BE225123EC80039F7B8 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		D1966BE425123F1D0039F7B8 /* GeneratorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratorType.swift; sourceTree = "<group>"; };
+		D1966BE8251240370039F7B8 /* MainViewController+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+Model.swift"; sourceTree = "<group>"; };
+		D1966BEA251240460039F7B8 /* MainViewController+Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+Controller.swift"; sourceTree = "<group>"; };
 		D19FB73025117F7F007191A7 /* WaveParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveParams.swift; sourceTree = "<group>"; };
 		D1D432E524FEE40E00ECD5F8 /* DSP GUI ST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DSP GUI ST.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D1D432EA24FEE40E00ECD5F8 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D1D432EF24FEE41300ECD5F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D1D432F124FEE41300ECD5F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -160,6 +168,52 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D1966BDF25123E780039F7B8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D1F4B93425067AEF00914849 /* Mixer */,
+				D1F4B93325067AE300914849 /* Wave */,
+				D18EECC225064D3200580747 /* Music */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D1966BE025123EA20039F7B8 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				D1966BE125123EB90039F7B8 /* UI */,
+				D186373525028B2B00A2CB43 /* Extensions */,
+				D186373925028C0900A2CB43 /* Renderer */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		D1966BE125123EB90039F7B8 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				D1966BE225123EC80039F7B8 /* Label.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		D1966BE62512401B0039F7B8 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D1966BE7251240220039F7B8 /* MainViewController */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D1966BE7251240220039F7B8 /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D1D432EA24FEE40E00ECD5F8 /* MainViewController.swift */,
+				D1966BEA251240460039F7B8 /* MainViewController+Controller.swift */,
+				D1966BE8251240370039F7B8 /* MainViewController+Model.swift */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
 		D19FB72E25117C82007191A7 /* Generators */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,6 +231,7 @@
 			children = (
 				D19FB72E25117C82007191A7 /* Generators */,
 				D19FB73025117F7F007191A7 /* WaveParams.swift */,
+				D1966BE425123F1D0039F7B8 /* GeneratorType.swift */,
 			);
 			path = Auxiliary;
 			sourceTree = "<group>";
@@ -204,13 +259,10 @@
 		D1D432E724FEE40E00ECD5F8 /* DSP GUI ST */ = {
 			isa = PBXGroup;
 			children = (
-				D1F4B93425067AEF00914849 /* Mixer */,
-				D1F4B93325067AE300914849 /* Wave */,
-				D18EECC225064D3200580747 /* Music */,
-				D186373525028B2B00A2CB43 /* Extensions */,
-				D186373925028C0900A2CB43 /* Renderer */,
+				D1966BE025123EA20039F7B8 /* Common */,
+				D1966BDF25123E780039F7B8 /* Model */,
 				D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */,
-				D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */,
+				D1966BE62512401B0039F7B8 /* ViewControllers */,
 				D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */,
 				D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */,
 				D1D432EE24FEE41300ECD5F8 /* Main.storyboard */,
@@ -394,8 +446,9 @@
 				D18EECCF25064DD600580747 /* KeysManager.swift in Sources */,
 				D1F4B93A25067B1E00914849 /* Mixer.swift in Sources */,
 				D187CBB52510DE340039C048 /* Sawtooth.swift in Sources */,
-				D1D432EB24FEE40E00ECD5F8 /* ViewController.swift in Sources */,
+				D1D432EB24FEE40E00ECD5F8 /* MainViewController.swift in Sources */,
 				D1F4B93E25067B6300914849 /* AudioWave.swift in Sources */,
+				D1966BE9251240370039F7B8 /* MainViewController+Model.swift in Sources */,
 				D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */,
 				D19FB73125117F7F007191A7 /* WaveParams.swift in Sources */,
 				D1D5513B2500FCB800F3F8B4 /* WavesDrawView.swift in Sources */,
@@ -403,7 +456,10 @@
 				D1F4B93825067B0700914849 /* Square.swift in Sources */,
 				D186373B25028C3400A2CB43 /* WaveRenderer.swift in Sources */,
 				D186373825028B5E00A2CB43 /* NSView.swift in Sources */,
+				D1966BE325123EC80039F7B8 /* Label.swift in Sources */,
+				D1966BEB251240460039F7B8 /* MainViewController+Controller.swift in Sources */,
 				D1D432E924FEE40E00ECD5F8 /* AppDelegate.swift in Sources */,
+				D1966BE525123F1D0039F7B8 /* GeneratorType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

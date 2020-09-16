@@ -14,6 +14,8 @@ class Params {
     var initialPhase: (_ currentSamle: Int) -> Double
     var sampleRate: Double = 44100
     
+    static var standard: Params { return .init(frequency: { _ in 0 }, amplitude: { _ in 0 }, initialPhase: { _ in 0 }, sampleRate: 44100) }
+    
     init(frequency: @escaping (Int) -> Double, amplitude: @escaping (Int) -> Double, initialPhase: @escaping (Int) -> Double, sampleRate: Double) {
         self.frequency = frequency
         self.amplitude = amplitude
