@@ -55,6 +55,8 @@ class ViewController: NSViewController {
         default:
             break
         }
+        self.updateValues()
+        
     }
     //MARK: -subviews
     var paramsVarChangeSwitch = NSSegmentedControl(labels: ["Signal", "Frequency", "Amplitude"], trackingMode: .selectOne, target: nil, action: #selector(onParamsChange(_:)))
@@ -69,8 +71,7 @@ class ViewController: NSViewController {
     var phaseLabel = Label()//NSText(frame: .init(x: 50, y: 50, width: 60, height: 12))
     var frequencyLabel = Label()//NSText(frame: .init(x: 50, y: 50, width: 60, height: 12))
     var modulationLabel = Label()
-    var frequencyModulationKindSwitch = NSSegmentedControl(labels: ["Sinusoid", "Square", "Triangle", "Sawtooth", "Noise"], trackingMode: .selectOne, target: nil, action: #selector(onFrequencyModulationKindChanged(_:)))
-    var amplitudeModulationKindSwitch = NSSegmentedControl(labels: ["Sinusoid", "Square", "Triangle", "Sawtooth", "Noise"], trackingMode: .selectOne, target: nil, action: #selector(onAmplitudeModulationKindChanged(_:)))
+    var btnNoneModulation = NSButton(title: "None", target: self, action: #selector(btnNoneTapped(_:)))
     var btnPlayMusic = NSButton()
     //MARK: -control
     var renderer = WaveRenderer()
@@ -86,47 +87,45 @@ class ViewController: NSViewController {
     
     var channelSelectiongSetting = false
     
+    @objc func btnNoneTapped(_ sender: NSButton) {
+        switch self.currentVars {
+        case .frequency:
+            self.audioUnit.currentWave.frequencySignal = nil
+        case .amplitude:
+            self.audioUnit.currentWave.amplitudeSignal = nil
+        default:
+            break
+        }
+        self.updateValues()
+    }
+    
     @objc func onChannelChanged(_ sender: NSPopUpButton) {
         let index = sender.indexOfSelectedItem
 
         let amplitude = self.amplitudeInput.doubleValue
         let frequency = self.frequencyInput.doubleValue
         let phase = self.phaseInput.doubleValue
+        let params = Params(frequency: { _ in frequency }, amplitude: { _ in amplitude }, initialPhase: { _ in phase }, sampleRate: 44100)
+        
         if index == sender.itemArray.count - 1 {
             
             switch signalKindSwitch.selectedSegment {
             case 0:
-                audioUnit.channels.insert(Sinusoid(
-                    frequency: { _ in frequency },
-                    amplitude: { _ in amplitude },
-                    initialPhase: { _ in phase }, sampleRate: audioUnit.sampleRate), at: 0)
+                audioUnit.channels.append(Sinusoid(params: params))
             case 1:
-                audioUnit.channels.insert(Square(
-                    frequency: { _ in frequency },
-                    amplitude: { _ in amplitude },
-                    initialPhase: { _ in phase },
-                    sampleRate: audioUnit.sampleRate,
-                    dutyCycleShare: { _ in 0.5 }), at: 0)
+                audioUnit.channels.append(Square(params: params))
             case 2:
-                audioUnit.channels.insert(Triangular(
-                    frequency: { _ in frequency },
-                    amplitude: { _ in amplitude },
-                    initialPhase: { _ in phase },
-                    sampleRate: audioUnit.sampleRate), at: 0)
-
-                //add dutyCycle label
-            /*case 2:
-                audioUnit.type = .triangle
+                audioUnit.channels.append(Triangular(params: params))
             case 3:
-                audioUnit.type = .sawtooth
-            case 5:
-                audioUnit.type = .noise*/
+                audioUnit.channels.append(Sawtooth(params: params))
+            case 4:
+                audioUnit.channels.append(NoiseWave(params: params))
             default:
                 break
             }
             //audioUnit.renderer?.waves.append(.init(coords: [CGPoint](), color: NSColor.green.cgColor))
+            audioUnit.selectedWave = audioUnit.channels.count - 1
             self.updateValues()
-            audioUnit.selectedWave = 0
         } else {
             audioUnit.selectedWave = index
 
@@ -136,67 +135,83 @@ class ViewController: NSViewController {
         }
     }
     
+    private func updateUiComponents(for signal: AudioWave?, floating: Int = 0) {
+        
+        self.frequencySlider.doubleValue = signal?.frequency(0) ?? 0
+        self.amplitudeSlider.doubleValue = signal?.amplitude(0) ?? 0
+        
+        self.frequencyInput.stringValue = String(format: "%.\(floating)f", signal?.frequency(0) ?? 0)
+        self.amplitudeInput.stringValue = String(format: "%.\(floating)f", signal?.amplitude(0) ?? 0)
+        
+        if let signal = signal {
+            switch signal.getType() {
+            case .sinusoid:
+                self.signalKindSwitch.selectedSegment = 0
+            case .square:
+                self.signalKindSwitch.selectedSegment = 1
+            case .triangle:
+                self.signalKindSwitch.selectedSegment = 2
+            case .sawtooth:
+                self.signalKindSwitch.selectedSegment = 3
+            case .noise:
+                self.signalKindSwitch.selectedSegment = 4
+            }
+        } else {
+            self.signalKindSwitch.setSelected(false, forSegment: self.signalKindSwitch.selectedSegment)
+        }
+
+    }
+    
     func updateValues() {
         self.channelsList.removeAllItems()
-        /*self.channelsList.addItems(withTitles:
-            self.audioUnit.channels.map({
-                $0.getType().rawValue
-            })
-        )*/
         var i = 1
         for channel in self.audioUnit.channels {
-            //self.channelsList.addItem(withTitle: channel.getType().rawValue)
-
-            self.channelsList.insertItem(withTitle: "Channel \(i)  (\(channel.getType().rawValue))", at: 0)
-            //self.channelsList.selectItem(at: 0)
+            self.channelsList.addItem(withTitle: "Channel \(i)  (\(channel.getType().rawValue))")
             i += 1
         }
         self.channelsList.addItem(withTitle: "New...")
         channelSelectiongSetting = true
         self.channelsList.selectItem(at: self.audioUnit.selectedWave)
         channelSelectiongSetting = false
-        self.frequencySlider.doubleValue = self.audioUnit.currentWave.frequency(0)
-        self.amplitudeSlider.doubleValue = self.audioUnit.currentWave.amplitude(0)
         
-        self.frequencyInput.doubleValue = self.audioUnit.currentWave.frequency(0)
-        let qNr = amplitudeSlider.intValue.quotientAndRemainder(dividingBy: 1000)
-        if qNr.quotient > 0 {
-            self.amplitudeInput.stringValue = "\(qNr.quotient)\(qNr.remainder)"
+        switch self.currentVars {
+        case .signal:
 
-        } else {
-            self.amplitudeInput.stringValue = "\(qNr.remainder)"
+            self.amplitudeSlider.maxValue = 16000
+            self.amplitudeSlider.minValue = 0
+            self.frequencySlider.minValue = 0
+            self.frequencySlider.maxValue = 20000
+            
+            updateUiComponents(for: self.audioUnit.currentWave)
+        case .frequency:
+            self.amplitudeSlider.maxValue = 1
+            self.amplitudeSlider.minValue = 0
+            self.frequencySlider.minValue = 0
+            self.frequencySlider.maxValue = 100
+            updateUiComponents(for: self.audioUnit.currentWave.frequencySignal, floating: 4)
+            
+        case .amplitude:
+            self.amplitudeSlider.maxValue = 1
+            self.amplitudeSlider.minValue = 0
+            self.frequencySlider.minValue = 0
+            self.frequencySlider.maxValue = 100
+            updateUiComponents(for: self.audioUnit.currentWave.amplitudeSignal, floating: 4)
         }
-        
-        switch audioUnit.currentWave.getType() {
-        case .sinusoid:
-            self.signalKindSwitch.selectedSegment = 0
-        case .square:
-            self.signalKindSwitch.selectedSegment = 1
-        case .triangle:
-            self.signalKindSwitch.selectedSegment = 2
-        default:
-            break
-        }
-        //self.pha.doubleValue = self.audioUnit.currentChannel.amplitude(0)
         
     }
     
     @objc func amplitudeSliderChanged(_ sender: NSSlider) {
-        let qNr = sender.intValue.quotientAndRemainder(dividingBy: 1000)
-        if qNr.quotient > 0 {
-            self.amplitudeInput.stringValue = "\(qNr.quotient)\(qNr.remainder)"
-
-        } else {
-            self.amplitudeInput.stringValue = "\(qNr.remainder)"
-        }
-        let amplitudeValue = self.amplitudeInput.doubleValue
+        let amplitudeValue = self.amplitudeSlider.doubleValue
         switch self.currentVars {
         case .signal:
+            amplitudeInput.stringValue = String(format: "%.1f", amplitudeValue)
             self.audioUnit.currentWave.amplitude = { _ in amplitudeValue }
         case .frequency:
-            self.amplitudeFrequencyModulation = amplitudeValue/1000
-        default:
-            break
+            amplitudeInput.stringValue = String(format: "%.4f", amplitudeValue)
+            self.audioUnit.currentWave.frequencySignal?.amplitude = { _ in amplitudeValue }
+        case .amplitude:
+            amplitudeInput.stringValue = String(format: "%.4f", amplitudeValue)
+            self.audioUnit.currentWave.amplitudeSignal?.amplitude = { _ in amplitudeValue }
         }
         //updateSound()
     }
@@ -215,24 +230,67 @@ class ViewController: NSViewController {
     }
     
     @objc func frequencySliderChanged(_ sender: NSSlider) {
-        let qNr = sender.intValue.quotientAndRemainder(dividingBy: 1000)
-        if qNr.quotient > 0 {
-            self.frequencyInput.stringValue = "\(qNr.quotient)\(qNr.remainder)"
-
-        } else {
-            self.frequencyInput.stringValue = "\(qNr.remainder)0"
-        }
-        let frequencyValue = self.frequencyInput.doubleValue
+        let frequencyValue = self.frequencySlider.doubleValue
         switch self.currentVars {
-        case .signal: self.audioUnit.currentWave.frequency = { _ in frequencyValue }
-        case .frequency: self.frequencyFrequencyModulation = frequencyValue
-        case .amplitude: self.frequencyAmplitudeModulation = frequencyValue
+        case .signal:
+            frequencyInput.stringValue = String(format: "%.1f", frequencyValue)
+            self.audioUnit.currentWave.frequency = { _ in frequencyValue }
+        case .frequency:
+            frequencyInput.stringValue = String(format: "%.4f", frequencyValue)
+            self.audioUnit.currentWave.frequencySignal?.frequency = { _ in frequencyValue }
+        case .amplitude:
+            frequencyInput.stringValue = String(format: "%.4f", frequencyValue)
+            self.audioUnit.currentWave.amplitudeSignal?.frequency = { _ in frequencyValue }
         }
         //updateSound()
     }
     
+    func changeFrequencyModulationKind(to kindIndex: Int) {
+        let frequencyValue = self.frequencyInput.doubleValue// / 1000
+        let amplitudeValue = self.amplitudeInput.doubleValue
+        switch kindIndex {
+        case 0:
+            audioUnit.currentWave.frequencySignal = Sinusoid(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        case 1:
+            audioUnit.currentWave.frequencySignal = Square(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100, dutyCycleShare: { _ in 0.5 })
+        case 2:
+            audioUnit.currentWave.frequencySignal = Triangular(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        case 3:
+            audioUnit.currentWave.frequencySignal = Sawtooth(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        case 5:
+            audioUnit.currentWave.frequencySignal = NoiseWave(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        default:
+            break
+        }
+    }
+    
+    func changeAmplitudeModulationKind(to kindIndex: Int) {
+        let frequencyValue = self.frequencyInput.doubleValue// / 1000
+        let amplitudeValue = self.amplitudeInput.doubleValue
+        switch kindIndex {
+        case 0:
+            audioUnit.currentWave.amplitudeSignal = Sinusoid(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        case 1:
+            audioUnit.currentWave.amplitudeSignal = Square(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100, dutyCycleShare: { _ in 0.5 })
+        case 2:
+            audioUnit.currentWave.amplitudeSignal = Triangular(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        case 3:
+            audioUnit.currentWave.amplitudeSignal = Sawtooth(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        case 5:
+            audioUnit.currentWave.amplitudeSignal = NoiseWave(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
+        default:
+            break
+        }
+    }
+    
     @objc func onKindChanged(_ sender: NSSegmentedControl) {
-        let channelIndex = audioUnit.channels.count - audioUnit.selectedWave - 1
+        switch self.currentVars {
+        case .frequency:
+            changeFrequencyModulationKind(to: sender.selectedSegment)
+        case .amplitude:
+            changeAmplitudeModulationKind(to: sender.selectedSegment)
+        case .signal:
+        let channelIndex = audioUnit.selectedWave
         let params = audioUnit.channels[channelIndex].getParams()
         switch sender.selectedSegment {
         case 0:
@@ -266,6 +324,7 @@ class ViewController: NSViewController {
         }
         
         updateValues()
+        }
     }
     
     var frequencyFrequencyModulation: Double = 2
@@ -276,89 +335,6 @@ class ViewController: NSViewController {
     var amplitudeAmplitudeModulation: Double = 1
     var phaseAmplitudeModulation: Double = 0
     
-    @objc func onFrequencyModulationKindChanged(_ sender: NSSegmentedControl) {
-        let frequencyValue = self.frequencyInput.doubleValue / 1000
-        let amplitudeValue = self.amplitudeInput.doubleValue / 1000
-        
-        if self.currentVars == .frequency || self.currentVars == .signal {
-        switch sender.selectedSegment {
-        case 0:
-            audioUnit.currentWave.frequencySignal = Sinusoid(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-            /*audioUnit.currentWave.frequency = { currentSample in
-                /*print(currentSample)
-                //print("frequency: \(frequencyValue * abs(sin(Double(currentSample)/44100*Double.pi)))")
-                var c: Int
-                let qNr = currentSample.quotientAndRemainder(dividingBy: 44100)
-                if qNr.quotient % 2 == 0 {
-                    c = qNr.remainder
-                } else {
-                    c = -qNr.remainder
-                }
-                //let result = frequencyValue + frequencyValue * sin(Double(currentSample)/44100*Double.pi*2)
-                //print("...\(result)")
-                frV += 0.5*/
-                //let result = frV
-                return frequencyValue * sin(2*Double.pi*Double(abs(currentSample - Int(44100)))/44100 + 0)
-            }*/
-            /*audioUnit.channels[audioUnit.selectedChannel] = Sinusoid(
-                frequency: audioUnit.channels[audioUnit.selectedChannel].frequency,
-                amplitude: audioUnit.channels[audioUnit.selectedChannel].amplitude,
-                initialPhase: audioUnit.channels[audioUnit.selectedChannel].initialPhase, sampleRate: audioUnit.sampleRate)*/
-        case 1:
-            /*audioUnit.currentWave.frequency = { currentSample in
-                let period = Int(currentSample / 44100)
-                //print(period)
-                //print(Double((0-1) * (period % 2) + ((period + 1) % 2)))
-                return frequencyValue + frequencyValue * self.frequencyFrequencyModulation * 0.01 *
-                    Double((0-1) * (period % 2) + ((period + 1) % 2))
-            }*/
-            audioUnit.currentWave.frequencySignal = Square(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100, dutyCycleShare: { _ in 0.5 })
-            /*audioUnit.channels[audioUnit.selectedChannel] = Square(
-                frequency: audioUnit.channels[audioUnit.selectedChannel].frequency,
-                amplitude: audioUnit.channels[audioUnit.selectedChannel].amplitude,
-                initialPhase: 0,
-                sampleRate: audioUnit.sampleRate,
-                dutyCycleShare: { _ in 0.5 })
-            //add dutyCycle label*/
-        case 2:
-            audioUnit.currentWave.frequencySignal = Triangular(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-            /*audioUnit.currentWave.frequency = { currentSample in
-                let period = max(Double(currentSample) / 44100, 1)
-                let qNr = currentSample % Int(period)
-                if qNr < Int(period) / 2 {// || qNr > 3.0/4.0*period {
-                    return -frequencyValue + 2 * frequencyValue * Double(currentSample % Int(period)) / (period/2) //2 * amplitude(currentSample) * Double(currentSample % Int(period)) / (period/4) - amplitude(currentSample)
-                } else {
-                    return frequencyValue
-                         - 2 * frequencyValue * Double(currentSample % Int(period/2)) / (period/2)
-                     //return amplitude(currentSample) - 2 * amplitude(currentSample) * Double(currentSample % Int(period)) / (period/4)
-                     //z = -Double(currentSample % Int(x))/x
-                }
-            }*/
-        case 3:
-            audioUnit.currentWave.frequencySignal = Sawtooth(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-        case 5:
-            audioUnit.currentWave.frequencySignal = NoiseWave(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-        default:
-            break
-        }
-        } else {
-            switch sender.selectedSegment {
-            case 0:
-                audioUnit.currentWave.amplitudeSignal = Sinusoid(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-            case 1:
-                audioUnit.currentWave.amplitudeSignal = Square(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100, dutyCycleShare: { _ in 0.5 })
-            case 2:
-                audioUnit.currentWave.amplitudeSignal = Triangular(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-            case 3:
-                audioUnit.currentWave.amplitudeSignal = Sawtooth(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-            case 5:
-                audioUnit.currentWave.amplitudeSignal = NoiseWave(frequency: { currentSample in frequencyValue }, amplitude: { currentSample in amplitudeValue }, initialPhase: { _ in 0}, sampleRate: 44100)
-            default:
-                break
-            }
-        }
-        //updateValues()
-    }
     
     
     @objc func onAmplitudeModulationKindChanged(_ sender: NSSegmentedControl) {
@@ -407,14 +383,9 @@ class ViewController: NSViewController {
         signalKindSwitch.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 12).isActive = true
         signalKindSwitch.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
         
-        
-        frequencyModulationKindSwitch.translatesAutoresizingMaskIntoConstraints = false
-        frequencyModulationKindSwitch.topAnchor.constraint(equalTo: signalKindSwitch.bottomAnchor, constant: 12).isActive = true
-        frequencyModulationKindSwitch.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
-        
         amplitudeLabel.translatesAutoresizingMaskIntoConstraints = false
         amplitudeInput.translatesAutoresizingMaskIntoConstraints = false
-        amplitudeLabel.topAnchor.constraint(equalTo: frequencyModulationKindSwitch.bottomAnchor, constant: 12).isActive = true
+        amplitudeLabel.topAnchor.constraint(equalTo: signalKindSwitch.bottomAnchor, constant: 12).isActive = true
         amplitudeLabel.heightAnchor.constraint(equalToConstant: labelHeight).isActive = true
         amplitudeLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 12).isActive = true
         amplitudeLabel.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
@@ -476,7 +447,6 @@ class ViewController: NSViewController {
         //self.view.fill(with: drawView, inset: 0)
         self.view.addSubview(drawView)
         self.view.addSubview(signalKindSwitch)
-        self.view.addSubview(frequencyModulationKindSwitch)
         signalKindSwitch.selectedSegment = 0
         self.view.addSubview(self.channelsList)
         channelsList.addItems(withTitles: ["New"])
@@ -531,7 +501,7 @@ class ViewController: NSViewController {
         let inset: CGFloat = 8
         subview.translatesAutoresizingMaskIntoConstraints = false
         subview.widthAnchor.constraint(greaterThanOrEqualToConstant: 400).isActive = true
-        subview.topAnchor.constraint(equalTo: self.frequencyModulationKindSwitch.bottomAnchor, constant: inset).isActive = true
+        subview.topAnchor.constraint(equalTo: self.signalKindSwitch.bottomAnchor, constant: inset).isActive = true
         subview.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -inset).isActive = true
         subview.leftAnchor.constraint(equalTo: self.amplitudeSlider.rightAnchor, constant: inset).isActive = true
         subview.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -inset).isActive = true
@@ -1138,10 +1108,10 @@ extension ViewController: NSTextFieldDelegate {
                     }
             case .frequency:
                 self.frequencyFrequencyModulation = frequency / 1000
-                self.audioUnit.currentWave.frequencySignal?.frequency = { _ in frequency / 1000 }
+                self.audioUnit.currentWave.frequencySignal?.frequency = { _ in frequency }
             case .amplitude:
                 self.frequencyAmplitudeModulation = frequency / 1000
-                self.audioUnit.currentWave.amplitudeSignal?.frequency = { _ in frequency / 1000}
+                self.audioUnit.currentWave.amplitudeSignal?.frequency = { _ in frequency }
             //
             }
             
@@ -1153,12 +1123,13 @@ extension ViewController: NSTextFieldDelegate {
                     }
             case .frequency:
                 self.amplitudeFrequencyModulation = amplitude / 1000
-                audioUnit.currentWave.frequencySignal?.amplitude = { _ in amplitude / 1000 }
+                audioUnit.currentWave.frequencySignal?.amplitude = { _ in amplitude }
             case .amplitude:
                 self.amplitudeAmplitudeModulation = amplitude / 1000
-                audioUnit.currentWave.amplitudeSignal?.amplitude = { _ in amplitude / 1000 }
+                audioUnit.currentWave.amplitudeSignal?.amplitude = { _ in amplitude }
             //
             }
+            self.updateValues()
             return true
         } else if (commandSelector == #selector(NSResponder.deleteForward(_:))) {
             // Do something against DELETE key

@@ -16,6 +16,7 @@
 		D18EECCB25064DB800580747 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCA25064DB800580747 /* Key.swift */; };
 		D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCC25064DCA00580747 /* SheetNote.swift */; };
 		D18EECCF25064DD600580747 /* KeysManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18EECCE25064DD600580747 /* KeysManager.swift */; };
+		D19FB73125117F7F007191A7 /* WaveParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19FB73025117F7F007191A7 /* WaveParams.swift */; };
 		D1D432E924FEE40E00ECD5F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */; };
 		D1D432EB24FEE40E00ECD5F8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */; };
 		D1D432ED24FEE41300ECD5F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 		D18EECCA25064DB800580747 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		D18EECCC25064DCA00580747 /* SheetNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetNote.swift; sourceTree = "<group>"; };
 		D18EECCE25064DD600580747 /* KeysManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysManager.swift; sourceTree = "<group>"; };
+		D19FB73025117F7F007191A7 /* WaveParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveParams.swift; sourceTree = "<group>"; };
 		D1D432E524FEE40E00ECD5F8 /* DSP GUI ST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DSP GUI ST.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D1D432EA24FEE40E00ECD5F8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +160,27 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D19FB72E25117C82007191A7 /* Generators */ = {
+			isa = PBXGroup;
+			children = (
+				D1F4B93525067AFC00914849 /* Sinusoid.swift */,
+				D1F4B93725067B0700914849 /* Square.swift */,
+				D1F4B93B25067B4A00914849 /* Triangular.swift */,
+				D187CBB42510DE340039C048 /* Sawtooth.swift */,
+				D187CBB62510EF8E0039C048 /* Noise.swift */,
+			);
+			path = Generators;
+			sourceTree = "<group>";
+		};
+		D19FB72F25117F72007191A7 /* Auxiliary */ = {
+			isa = PBXGroup;
+			children = (
+				D19FB72E25117C82007191A7 /* Generators */,
+				D19FB73025117F7F007191A7 /* WaveParams.swift */,
+			);
+			path = Auxiliary;
+			sourceTree = "<group>";
+		};
 		D1D432DC24FEE40E00ECD5F8 = {
 			isa = PBXGroup;
 			children = (
@@ -218,12 +241,8 @@
 		D1F4B93325067AE300914849 /* Wave */ = {
 			isa = PBXGroup;
 			children = (
-				D1F4B93525067AFC00914849 /* Sinusoid.swift */,
-				D1F4B93725067B0700914849 /* Square.swift */,
-				D1F4B93B25067B4A00914849 /* Triangular.swift */,
+				D19FB72F25117F72007191A7 /* Auxiliary */,
 				D1F4B93D25067B6300914849 /* AudioWave.swift */,
-				D187CBB42510DE340039C048 /* Sawtooth.swift */,
-				D187CBB62510EF8E0039C048 /* Noise.swift */,
 			);
 			path = Wave;
 			sourceTree = "<group>";
@@ -378,6 +397,7 @@
 				D1D432EB24FEE40E00ECD5F8 /* ViewController.swift in Sources */,
 				D1F4B93E25067B6300914849 /* AudioWave.swift in Sources */,
 				D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */,
+				D19FB73125117F7F007191A7 /* WaveParams.swift in Sources */,
 				D1D5513B2500FCB800F3F8B4 /* WavesDrawView.swift in Sources */,
 				D18EECC625064D7F00580747 /* Note.swift in Sources */,
 				D1F4B93825067B0700914849 /* Square.swift in Sources */,

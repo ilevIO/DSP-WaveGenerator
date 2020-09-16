@@ -11,6 +11,8 @@ import Cocoa
 import CoreGraphics
 
 protocol AudioWave: class {
+    static var type: GenerationType { get }
+    
     var frequency: (_ currentSample: Int) -> Double { get set }
     var amplitude: (_ currentSample: Int) -> Double { get set }
     var initialPhase: (_ currentSample: Int) -> Double { get set }
@@ -20,15 +22,11 @@ protocol AudioWave: class {
     var frequencySignal: AudioWave? { get set }
     var amplitudeSignal: AudioWave? { get set }
     
-    static var type: GenerationType { get }
     func getType() -> GenerationType
     func getSignal(at currentSample: Int) -> Double
     func getParams() -> Params
     
-    
-    
     init(params: Params)
-    //func getSignalSequence(from start: Int, to end: Int) -> [Double]
 
 }
 extension AudioWave {

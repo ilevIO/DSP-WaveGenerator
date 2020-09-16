@@ -1,16 +1,16 @@
 //
-//  Sinusoid.swift
+//  Noise.swift
 //  DSP GUI ST
 //
-//  Created by ilyayelagov on 9/7/20.
+//  Created by ilyayelagov on 9/15/20.
 //  Copyright © 2020 ilyayelagov. All rights reserved.
 //
 
 import Foundation
-import Cocoa
-import CoreGraphics
 
-class Sinusoid: AudioWave {
+class NoiseWave: AudioWave {
+    var frequencySignal: AudioWave?
+    
     var amplitudeSignal: AudioWave?
     
     required init(params: Params) {
@@ -29,23 +29,13 @@ class Sinusoid: AudioWave {
     var initialPhase: (_ currentSamle: Int) -> Double
     var sampleRate: Double
     var cachedPhase: Double = 0
-    
-    var frequencySignal: AudioWave?
-    
+
     var fi: Double = 0
     
     func getSignal(at currentSample: Int) -> Double {
-        fi += 2 * Double.pi * Double(1 + (frequencySignal?.getSignal(at: currentSample) ?? 0)) * frequency(currentSample) / sampleRate
-        //let signal =
-        /*fi += 2*Double.pi
-        * Double(1 + (frequencySignal?.frequency(currentSample) ?? 0))
-        * frequency(currentSample)
-        / sampleRate*/
-        //* Double(abs(currentSample - Int(sampleRate)))/sampleRate + initialPhase(currentSample)
-            
-        let signal = amplitude(currentSample)
-                * sin(fi)
-        cachedPhase = signal
+        fi += 2 * Double.pi * Double.random(in: 0..<1) * Double(1 + (frequencySignal?.getSignal(at: currentSample) ?? 0)) * frequency(currentSample) / sampleRate
+        
+        let signal = amplitude(currentSample) * sin(fi)
         return signal
     }
     
@@ -60,4 +50,3 @@ class Sinusoid: AudioWave {
         self.sampleRate = sampleRate
     }
 }
-
