@@ -241,7 +241,6 @@ extension MainViewController {
             case .amplitude:
                 model.audioUnit.currentWave.amplitudeSignal?.frequency = { _ in newValue }
             }
-
         }
         
         func valueEntered() {
@@ -256,10 +255,8 @@ extension MainViewController {
                 model.audioUnit.currentWave.frequencySignal?.frequency = { _ in frequency }
             case .amplitude:
                 model.audioUnit.currentWave.amplitudeSignal?.frequency = { _ in frequency }
-            //
             }
             
-            //let amplitude = self.amplitudeInput.doubleValue
             switch self.currentVars {
             case .signal:
                 model.audioUnit.currentWave.amplitude = { _ in
@@ -269,16 +266,14 @@ extension MainViewController {
                 model.audioUnit.currentWave.frequencySignal?.amplitude = { _ in amplitude }
             case .amplitude:
                 model.audioUnit.currentWave.amplitudeSignal?.amplitude = { _ in amplitude }
-            //
             }
         }
         
-        init() {
+        init(renderer: WaveRenderer) {
             model.audioUnit.channels.append(Sinusoid(
                 frequency: { _ in Double( 0 )},
                 amplitude: { _ in Double( 0 )},
                 initialPhase: { _ in Double( 0 )}, sampleRate: 44100))
-            let renderer = WaveRenderer()
             model.audioUnit.renderer = renderer
         }
     }

@@ -14,7 +14,7 @@ import AVFoundation
 
 class MainViewController: NSViewController {
     
-    var controller = Controller()
+    var controller: Controller!
     
     @objc func onParamsChange(_ sender: NSSegmentedControl) {
         controller.variableParamsChanged(to: sender.selectedSegment)
@@ -33,7 +33,6 @@ class MainViewController: NSViewController {
     var btnNoneModulation = NSButton(title: "None", target: self, action: #selector(btnNoneTapped(_:)))
     var btnPlayMusic = NSButton()
     //MARK: -control
-    //var renderer = WaveRenderer()
     var channelsList = NSPopUpButton(title: "Channels", target: nil, action: #selector(onChannelChanged(_:)))
     let signalKindSwitch = NSSegmentedControl(labels: ["Sinusoid", "Square", "Triangle", "Sawtooth", "Noise"], trackingMode: .selectOne, target: nil, action: #selector(onKindChanged(_:)))
     let paramsVarChangeSwitch = NSSegmentedControl(labels: [Controller.ParamsVariation.signal.rawValue, Controller.ParamsVariation.frequency.rawValue, Controller.ParamsVariation.amplitude.rawValue], trackingMode: .selectOne, target: nil, action: #selector(onParamsChange(_:)))
@@ -309,17 +308,13 @@ class MainViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /*self.view.addSubview(drawView)
-        drawView.translatesAutoresizingMaskIntoConstraints = false
-        drawView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        drawView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        drawView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        drawView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true*/
+        let renderer = WaveRenderer()
+        self.controller = Controller(renderer: renderer)
+        controller.view = self
+        self.drawView.renderer = renderer
+        
         self.setupSubviews()
         self.layoutSubviews()
-        controller.view = self
-        //controller.model.audioUnit.viewDelegate = self.view?.drawView
-        self.drawView.renderer = controller.model.audioUnit.renderer
         
         self.channelsList.insertItem(withTitle: "Channel 1 (Sinusoid)", at: 0)
         self.channelsList.selectItem(at: 0)

@@ -27,7 +27,7 @@
 		D1D432F024FEE41300ECD5F8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1D432EE24FEE41300ECD5F8 /* Main.storyboard */; };
 		D1D432FC24FEE41400ECD5F8 /* DSP_GUI_STTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D432FB24FEE41400ECD5F8 /* DSP_GUI_STTests.swift */; };
 		D1D4330724FEE41400ECD5F8 /* DSP_GUI_STUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D4330624FEE41400ECD5F8 /* DSP_GUI_STUITests.swift */; };
-		D1D5513B2500FCB800F3F8B4 /* WavesDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */; };
+		D1D723442513B033008F53CA /* WavesDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D723432513B033008F53CA /* WavesDrawView.swift */; };
 		D1F4B9322506555400914849 /* Chase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4B9312506555400914849 /* Chase.swift */; };
 		D1F4B93625067AFC00914849 /* Sinusoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4B93525067AFC00914849 /* Sinusoid.swift */; };
 		D1F4B93825067B0700914849 /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F4B93725067B0700914849 /* Square.swift */; };
@@ -81,7 +81,7 @@
 		D1D4330224FEE41400ECD5F8 /* DSP GUI STUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DSP GUI STUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1D4330624FEE41400ECD5F8 /* DSP_GUI_STUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSP_GUI_STUITests.swift; sourceTree = "<group>"; };
 		D1D4330824FEE41400ECD5F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavesDrawView.swift; sourceTree = "<group>"; };
+		D1D723432513B033008F53CA /* WavesDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavesDrawView.swift; sourceTree = "<group>"; };
 		D1F4B9312506555400914849 /* Chase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chase.swift; sourceTree = "<group>"; };
 		D1F4B93525067AFC00914849 /* Sinusoid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sinusoid.swift; sourceTree = "<group>"; };
 		D1F4B93725067B0700914849 /* Square.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 				D1966BDF25123E780039F7B8 /* Model */,
 				D1D432E824FEE40E00ECD5F8 /* AppDelegate.swift */,
 				D1966BE62512401B0039F7B8 /* ViewControllers */,
-				D1D5513A2500FCB800F3F8B4 /* WavesDrawView.swift */,
+				D1D723432513B033008F53CA /* WavesDrawView.swift */,
 				D1D432EC24FEE41300ECD5F8 /* Assets.xcassets */,
 				D1D432EE24FEE41300ECD5F8 /* Main.storyboard */,
 				D1D432F124FEE41300ECD5F8 /* Info.plist */,
@@ -450,8 +450,8 @@
 				D1F4B93E25067B6300914849 /* AudioWave.swift in Sources */,
 				D1966BE9251240370039F7B8 /* MainViewController+Model.swift in Sources */,
 				D18EECCD25064DCA00580747 /* SheetNote.swift in Sources */,
+				D1D723442513B033008F53CA /* WavesDrawView.swift in Sources */,
 				D19FB73125117F7F007191A7 /* WaveParams.swift in Sources */,
-				D1D5513B2500FCB800F3F8B4 /* WavesDrawView.swift in Sources */,
 				D18EECC625064D7F00580747 /* Note.swift in Sources */,
 				D1F4B93825067B0700914849 /* Square.swift in Sources */,
 				D186373B25028C3400A2CB43 /* WaveRenderer.swift in Sources */,
