@@ -27,7 +27,7 @@ class Mixer {
     var avActive     = false             // AVAudioSession active flag
     var audioRunning = false             // RemoteIO Audio Unit running flag
     
-    var viewDelegate: NSView?
+    var viewDelegate: RefreshableViewDelegate?
 
     var renderer: WaveRenderer?
     
@@ -146,11 +146,6 @@ class Mixer {
                 }
             }
             DispatchQueue.main.async {
-                /*if /*currentSample % 1 == 0 &&*/ (self.renderer?.waves.count ?? 0) > 0 {
-                    self.renderer?.waves[0].coords.append(contentsOf:  Array.init(repeating: .init(x: CGFloat(self.currentSample), y: CGFloat(firstXn)), count: count))
-                } else {
-                    //print("Render error")
-                }*/
                 if self.currentSample % Int(self.sampleRate/60) < count, let rect = self.viewDelegate?.visibleRect {
                     self.viewDelegate?.setNeedsDisplay(rect)
                 }

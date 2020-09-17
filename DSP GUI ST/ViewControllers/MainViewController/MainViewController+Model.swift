@@ -11,9 +11,9 @@ import Foundation
 extension MainViewController {
     class Model {
         var audioUnit = Mixer()
-        var controller: Controller?
+        var presenter: Presenter?
         func addSignal(type: GenerationType) {
-            let params = controller?.staticParams ?? Params.standard
+            let params = presenter?.staticParams ?? Params.standard
             switch type {
              case .sinusoid:
                  audioUnit.channels.append(Sinusoid(params: params))

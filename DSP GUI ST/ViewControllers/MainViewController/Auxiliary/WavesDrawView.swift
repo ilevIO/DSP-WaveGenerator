@@ -24,13 +24,13 @@ class WavesDrawView: NSView {
         renderer?.height = self.frame.height
         renderer?.draw(to: context)
 
-        //Page.main.render(to: context)
-        /*context.beginPath()
-        context.move(to: .zero)
-        CGContextAddLineToPoint(context, 100, 100)
-        CGContextSetRGBStrokeColor(context, 1, 1, 1, 1)
-        CGContextSetLineWidth(context, 5.0)
-        CGContextStrokePath(context)*/
-
     }
+}
+
+extension WavesDrawView: RefreshableViewDelegate {
+    func refresh() {
+        self.setNeedsDisplay(self.frame)
+    }
+    
+    
 }

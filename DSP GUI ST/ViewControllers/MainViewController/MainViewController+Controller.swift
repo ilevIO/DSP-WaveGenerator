@@ -9,7 +9,7 @@
 import Foundation
 
 extension MainViewController {
-    class Controller {
+    class Presenter {
         
         enum ParamsVariation: String {
             case signal = "Signal"
@@ -17,7 +17,7 @@ extension MainViewController {
             case amplitude = "Amplitude"
         }
         
-        weak var view: MainViewController? {
+        var view: WaveGeneratorViewDelegate? {
             didSet {
                 model.audioUnit.viewDelegate = view?.drawView
             }
@@ -31,9 +31,9 @@ extension MainViewController {
         var currentVars: ParamsVariation = .signal
         var selectedChannel = 0
         
-        var inputAmplitudeValue: Double { return view?.amplitudeInput.doubleValue ?? 0 }
-        var inputFrequencyValue: Double { return view?.frequencyInput.doubleValue ?? 0}
-        var inputPhaseValue: Double { return view?.phaseInput.doubleValue ?? 0 }
+        var inputAmplitudeValue: Double { return view?.amplitudeValue ?? 0 }
+        var inputFrequencyValue: Double { return view?.frequencyValue ?? 0}
+        var inputPhaseValue: Double { return view?.phaseValue ?? 0 }
         
         var staticParams: Params {
             let frequency = inputFrequencyValue
@@ -280,7 +280,7 @@ extension MainViewController {
     
 }
 
-extension MainViewController.Controller {
+extension MainViewController.Presenter {
     class MelodyWaveParams {
         var seconds: Double = 0
         let melodySpeed: Double = 60/70 //quorters per minute
@@ -300,7 +300,6 @@ extension MainViewController.Controller {
                 if abs(second - (Double(params.beginningSecond) + melody[params.sheetMusicIndex].length.rawValue*params.melodySpeed * params.relation)) < 0.001 {
                     params.beginningSecond = second
                     if params.sheetMusicIndex == melody.count-1 && params.delta == 1 || params.sheetMusicIndex == 0 && params.delta == -1 {
-                        //params.delta = -params.delta
                         params.sheetMusicIndex = 16
                         params.beginningSecond = 0
                         self.model.audioUnit.renderer?.waves[0].coords = .init()

@@ -14,15 +14,15 @@ import AVFoundation
 
 class MainViewController: NSViewController {
     
-    var controller: Controller!
+    var presenter: Presenter!
     
     @objc func onParamsChange(_ sender: NSSegmentedControl) {
-        controller.variableParamsChanged(to: sender.selectedSegment)
+        presenter.variableParamsChanged(to: sender.selectedSegment)
         self.updateValues()
         
     }
     //MARK: -subviews
-    var drawView = WavesDrawView()
+    var drawView: RefreshableViewDelegate = WavesDrawView()
     var amplitudeInput = NSTextField()
     var phaseInput = NSTextField()
     var frequencyInput = NSTextField()
@@ -35,14 +35,16 @@ class MainViewController: NSViewController {
     //MARK: -control
     var channelsList = NSPopUpButton(title: "Channels", target: nil, action: #selector(onChannelChanged(_:)))
     let signalKindSwitch = NSSegmentedControl(labels: ["Sinusoid", "Square", "Triangle", "Sawtooth", "Noise"], trackingMode: .selectOne, target: nil, action: #selector(onKindChanged(_:)))
-    let paramsVarChangeSwitch = NSSegmentedControl(labels: [Controller.ParamsVariation.signal.rawValue, Controller.ParamsVariation.frequency.rawValue, Controller.ParamsVariation.amplitude.rawValue], trackingMode: .selectOne, target: nil, action: #selector(onParamsChange(_:)))
+    let paramsVarChangeSwitch = NSSegmentedControl(labels: [Presenter.ParamsVariation.signal.rawValue, Presenter.ParamsVariation.frequency.rawValue, Presenter.ParamsVariation.amplitude.rawValue], trackingMode: .selectOne, target: nil, action: #selector(onParamsChange(_:)))
     
     var amplitudeSlider: NSSlider = NSSlider(target: nil, action: #selector(amplitudeSliderChanged(_:)))
     var phaseSlider: NSSlider = NSSlider(target: nil, action: #selector(phaseSliderChanged(_:)))
     var frequencySlider: NSSlider = NSSlider(target: nil, action: #selector(frequencySliderChanged(_:)))
     
+    //MARK: -handlers:
+    
     @objc func btnNoneTapped(_ sender: NSButton) {
-        controller.clearSignal()
+        presenter.clearSignal()
         self.updateValues()
     }
     
@@ -50,13 +52,65 @@ class MainViewController: NSViewController {
         let index = sender.indexOfSelectedItem
         
         if index == sender.numberOfItems - 1 {
-            controller.createNewChannel()
+            presenter.createNewChannel()
         } else {
-            controller.channelChanged(to: index)
+            presenter.channelChanged(to: index)
         }
-
     }
     
+    @objc func amplitudeSliderChanged(_ sender: NSSlider) {
+        let amplitudeValue = self.amplitudeSlider.doubleValue
+        presenter.amplitudeValueChanged(to: amplitudeValue)
+        amplitudeInput.stringValue = String(format: "%.\(presenter.getRequiredPrecision())f", amplitudeValue)
+    }
+    
+    @objc func phaseSliderChanged(_ sender: NSSlider) {
+        let phaseValue = self.phaseSlider.doubleValue
+        presenter.phaseValueChanged(to: phaseValue)
+        phaseInput.stringValue = String(format: "%.\(presenter.getRequiredPrecision())f", phaseValue)
+    }
+    
+    @objc func frequencySliderChanged(_ sender: NSSlider) {
+        let frequencyValue = self.frequencySlider.doubleValue
+        presenter.frequencyValueChanged(to: frequencyValue)
+        frequencyInput.stringValue = String(format: "%.\(presenter.getRequiredPrecision())f", frequencyValue)
+    }
+    
+    @objc func onKindChanged(_ sender: NSSegmentedControl) {
+        presenter.modulationKindChanged(to: sender.selectedSegment)
+    }
+    
+    @objc func btnPlayMusicTapped(_ sender: NSButton) {
+        presenter.playMusic()
+        self.updateValues()
+    }
+    
+    
+    @objc func btnPlayTapped(_ sender: NSButton) {
+        presenter.playTone()
+    }
+    
+    @objc func btnPlayAllTapped(_ sender: NSButton) {
+        presenter.playAll()
+    }
+    
+    @objc func btnStopTapped(_ sender: NSButton) {
+        presenter.stop()
+    }
+    
+    @objc func btnPauseTapped(_ sender: NSButton) {
+        presenter.pause()
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        self.drawView.refresh()
+    }
+    
+    override func mouseUp(with event: NSEvent) {
+        self.drawView.refresh()
+    }
+    
+    //MARK: -delegate
     private func updateUiComponents(for signal: AudioWave?, floating: Int = 0) {
         
         self.frequencySlider.doubleValue = signal?.frequency(0) ?? 0
@@ -87,49 +141,28 @@ class MainViewController: NSViewController {
     func updateValues() {
         self.channelsList.removeAllItems()
         
-        for channelTitle in controller.getChannelsTitle() {
+        for channelTitle in presenter.getChannelsTitle() {
             self.channelsList.addItem(withTitle: channelTitle)
         }
         self.channelsList.addItem(withTitle: "New...")
         
-        controller.isSettingChannelSelection = true
-        self.channelsList.selectItem(at: controller.selectedChannel)
-        controller.isSettingChannelSelection = false
+        presenter.isSettingChannelSelection = true
+        self.channelsList.selectItem(at: presenter.selectedChannel)
+        presenter.isSettingChannelSelection = false
         
-        let amplitudeRange = controller.getAmplitudeRange()
-        let frequencyRange = controller.getFrequencyRange()
-        let signal = controller.getSignal()
+        let amplitudeRange = presenter.getAmplitudeRange()
+        let frequencyRange = presenter.getFrequencyRange()
+        let signal = presenter.getSignal()
         
         amplitudeSlider.minValue = amplitudeRange.lowerBound
         amplitudeSlider.maxValue = amplitudeRange.upperBound
         frequencySlider.minValue = frequencyRange.lowerBound
         frequencySlider.maxValue = frequencyRange.upperBound
-        let requiredPrecision: Int = controller.getRequiredPrecision()
+        let requiredPrecision: Int = presenter.getRequiredPrecision()
         updateUiComponents(for: signal, floating: requiredPrecision)
     }
     
-    @objc func amplitudeSliderChanged(_ sender: NSSlider) {
-        let amplitudeValue = self.amplitudeSlider.doubleValue
-        controller.amplitudeValueChanged(to: amplitudeValue)
-        amplitudeInput.stringValue = String(format: "%.\(controller.getRequiredPrecision())f", amplitudeValue)
-    }
-    
-    @objc func phaseSliderChanged(_ sender: NSSlider) {
-        let phaseValue = self.phaseSlider.doubleValue
-        controller.phaseValueChanged(to: phaseValue)
-        phaseInput.stringValue = String(format: "%.\(controller.getRequiredPrecision())f", phaseValue)
-    }
-    
-    @objc func frequencySliderChanged(_ sender: NSSlider) {
-        let frequencyValue = self.frequencySlider.doubleValue
-        controller.frequencyValueChanged(to: frequencyValue)
-        frequencyInput.stringValue = String(format: "%.\(controller.getRequiredPrecision())f", frequencyValue)
-    }
-    
-    @objc func onKindChanged(_ sender: NSSegmentedControl) {
-        controller.modulationKindChanged(to: sender.selectedSegment)
-    }
-    
+    //MARK: -init
     func layoutSubviews() {
         let labelWidth: CGFloat = 50
         let inputWidth: CGFloat = 50
@@ -277,40 +310,12 @@ class MainViewController: NSViewController {
         paramsVarChangeSwitch.selectedSegment = 0
     }
     
-
-    
-    @objc func btnPlayMusicTapped(_ sender: NSButton) {
-        controller.playMusic()
-        self.updateValues()
-    }
-    
-    
-    @objc func btnPlayTapped(_ sender: NSButton) {
-        controller.playTone()
-    }
-    
-    @objc func btnPlayAllTapped(_ sender: NSButton) {
-        controller.playAll()
-    }
-    
-    @objc func btnStopTapped(_ sender: NSButton) {
-        controller.stop()
-    }
-    
-    @objc func btnPauseTapped(_ sender: NSButton) {
-        controller.pause()
-    }
-    
-    @objc func btnGenerateAndPlayTapped(_ sender: NSButton) {
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let renderer = WaveRenderer()
-        self.controller = Controller(renderer: renderer)
-        controller.view = self
+        self.presenter = Presenter(renderer: renderer)
+        presenter.view = self
         self.drawView.renderer = renderer
         
         self.setupSubviews()
@@ -325,15 +330,6 @@ class MainViewController: NSViewController {
         }
     }
 
-
-    override func mouseDown(with event: NSEvent) {
-        self.drawView.setNeedsDisplay(self.drawView.visibleRect)
-    }
-    
-    override func mouseUp(with event: NSEvent) {
-        //Page.main.onMouseUp(at: location)
-        self.drawView.setNeedsDisplay(self.drawView.visibleRect)
-    }
 }
 
 protocol Renderable {
@@ -344,9 +340,7 @@ protocol Renderable {
 extension MainViewController: NSTextFieldDelegate {
     func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
         if (commandSelector == #selector(NSResponder.insertNewline(_:))) {
-            // Do something against ENTER key
-            //if textView === self.frequencyInput {
-            controller.valueEntered()
+            presenter.valueEntered()
             self.updateValues()
             return true
         } else if (commandSelector == #selector(NSResponder.deleteForward(_:))) {
@@ -366,4 +360,37 @@ extension MainViewController: NSTextFieldDelegate {
         // return true if the action was handled; otherwise false
         return false
     }
+}
+
+extension MainViewController: WaveGeneratorViewDelegate {
+    
+    var amplitudeValue: Double {
+        get {
+            return amplitudeInput.doubleValue
+        }
+        set {
+            amplitudeInput.doubleValue = newValue
+        }
+    }
+    
+    var frequencyValue: Double {
+        get {
+            return frequencyInput.doubleValue
+        }
+        set {
+            frequencyInput.doubleValue = newValue
+        }
+    }
+    
+    var phaseValue: Double {
+        get {
+            return phaseInput.doubleValue
+        }
+        set {
+            phaseInput.doubleValue = newValue
+        }
+    }
+    
+    
+    
 }
